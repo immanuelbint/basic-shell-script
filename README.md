@@ -2,6 +2,6 @@
 
 Example few basic shell script i've create
 
-## Prequisite
+## Environment
 
 - Linux OS (pref CentOS 7)
