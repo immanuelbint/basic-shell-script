@@ -1,22 +1,51 @@
 #!/bin/bash
 
-## Script Yarn Tools
+### DESCRIPTION ########################
+# Running YARN few basic tools
+########################################
 
-## Define user function
-read -r -p "Ketikkan tool yarn yang ingin digunakan, example yarn list, yarn kill, yarn logs=> " respon
+menu="
+Ketikkan nomer/angka pada tools YARN yang ingin digunakan :
+1. YARN kill applicationID
+2. Get logs in running job YARN
+3. List all running job in YARN
+===========================================================
+i: Open stdin untuk execute command manual
+s: Munculkan list menu ini kembali
+c: Clear Screen
+q: Stop script ini
 
-## if else function
-if [[ "$respon" =~ ^(yarnkill|yarn kill|Yarnkill|Yarn kill|YarnKill|Yarn Kill)$ ]]
-then
-    read -r -p "Ketikkan applicationID => " response
-    yarn application -kill $response || echo "error applicationID not found"
-elif [[ "$respon" =~ ^(yarnlogs|yarn logs|Yarnlogs|Yarn logs|YarnLogs|Yarn Logs|yarnlog|yarn log|Yarn log|Yarn Log)$ ]]
-then
-    read -r -p "Ketikkan applicationID => " response
-    yarn logs -applicationId $response || echo "error applicationID not found"
-elif [[ "$respon" =~ ^(yarnlist|yarn list|Yarnlist|Yarn list|YarnList|Yarn List)$ ]]
-then
-    yarn app -list
-else
-    echo "Please enter valid command"; exit 0
+=> "
+
+printf "$menu"
+
+loop(){
+read -n 1 output
+
+EXE=
+if [ "$output" == 1 ]; then
+   read -n 1 EXE
 fi
+EXE=${output}${EXE}
+echo
+if [ "$EXE" == 1 ]; then
+  read -r -p "Ketikkan applicationID => " response
+  yarn application -kill $response || echo "error applicationID not found"
+elif [ "$EXE" == 2 ]; then
+  read -r -p "Ketikkan applicationID => " response
+  yarn logs -applicationId $response || echo "error applicationID not found"
+elif [ "$EXE" == 3 ]; then
+  yarn app -list
+elif [ "$EXE" == i ]; then
+   printf "shell> "
+   read -e shell
+   "$SHELL" -c "$shell"
+elif [ "$EXE" == s ]; then
+   printf "$menu"
+elif [ "$EXE" == c ]; then
+   clear
+elif [ "$EXE" == q ]; then
+   exit 0
+fi
+}
+while [ 1 ]; do loop; done
