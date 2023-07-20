@@ -1,23 +1,53 @@
 #!/bin/bash
 
-## Shell script basic HDFS Tools
+### DESCRIPTION ########################
+# Running HDFS few basic tools
+########################################
 
-## Define user input
-read -r -p "Ketikkan tool HDFS yang ingin digunakan, example savenamespace, report, listcorrupt, fsckdelete=> " respon
+menu="
+Ketikkan nomer/angka pada tools HDFS yang ingin digunakan :
+1. Savenamespace namenode HDFS
+2. Get report status HDFS
+3. Check list corrupt HDFS
+4. Fsck delete HDFS
+===========================================================
+i: Open stdin untuk execute command manual
+s: Munculkan list menu ini kembali
+c: Clear Screen
+q: Stop script ini
 
-## if else function
-if [[ "$respon" =~ ^(savenamespace|save namespace|savecheckpoint|save checkpoint|Savenamespace|Save Namespace|SaveNamespace)$ ]]
-then
-    hdfs dfsadmin -safemode enter; hdfs dfsadmin -saveNamespace; hdfs dfsadmin -safemode leave &> /dev/null && echo "save namespace: ok" || echo "save namespace: failed"
-elif [[ "$respon" =~ ^(report|Report|hdfsreport|hdfs report|Hdfs report|Hdfsreport|HDFS report|HDFSreport|HDFS Report)$ ]]
-then
-    hdfs dfsadmin -report
-elif [[ "$respon" =~ ^(listcorrupt|list corrupt|Listcorrupt|List corrupt|List Corrupt|listcorruptblock|list corrupt block)$ ]]
-then
-    hdfs fsck -list-corruptfileblocks
-elif [[ "$respon" =~ ^(fsckdelete|fsck delete|Fsck delete|Fsck Delete|hdfs fsck delete|hdfsfsckdelete)$ ]]
-then
-    hdfs fsck / -delete
-else
-echo "Please enter valid command"; exit 0
+=> "
+
+printf "$menu"
+
+loop(){
+read -n 1 output
+
+EXE=
+if [ "$output" == 1 ]; then
+   read -n 1 EXE
 fi
+EXE=${output}${EXE}
+echo
+if [ "$EXE" == 1 ]; then
+   hdfs dfsadmin -safemode enter; hdfs dfsadmin -saveNamespace
+   hdfs dfsadmin -safemode leave &> /dev/null && echo "save namespace: ok" || echo "save namespace: failed"
+elif [ "$EXE" == 2 ]; then
+   hdfs dfsadmin -report
+elif [ "$EXE" == 3 ]; then
+   hdfs fsck -list-corruptfileblocks
+elif [ "$EXE" == 4 ]; then
+   hdfs fsck / -delete
+elif [ "$EXE" == i ]; then
+   printf "shell> "
+   read -e shell
+   "$SHELL" -c "$shell"
+elif [ "$EXE" == s ]; then
+   printf "$menu"
+elif [ "$EXE" == c ]; then
+   clear
+elif [ "$EXE" == q ]; then
+   exit 0
+fi
+}
+while [ 1 ]; do loop; done
