@@ -12,6 +12,9 @@ SERVICE_LOG_PATH["mapred"]="/var/log/hadoop-mapreduce/mapred/"
 SERVICE_LOG_PATH["zk"]="/var/log/zookeeper/"
 SERVICE_LOG_PATH["hive"]="/var/log/hive/"
 
+## Pattern filename
+PATTERN=( "*.log.*" "*.log-*" "*.out.*" "*.err.*" "*.audit.*" )
+
 ## Function to housekeeping logs
 clean_log() {
     shopt -s nullglob
