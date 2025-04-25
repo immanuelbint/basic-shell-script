@@ -1,6 +1,7 @@
 #!/bin/bash
 # SHELL SCRIPT HK HADOOP SERVICE
 ## Crafted by immanuelbint
+#!/bin/bash
 ## Define Log path variables using default path, if your environment is different, change it below
 declare -A SERVICE_LOG_PATH
 SERVICE_LOG_PATH["ambariserver"]="/var/log/ambari-server/"
@@ -11,6 +12,9 @@ SERVICE_LOG_PATH["yarn"]="/var/log/hadoop-yarn/yarn/"
 SERVICE_LOG_PATH["mapred"]="/var/log/hadoop-mapreduce/mapred/"
 SERVICE_LOG_PATH["zk"]="/var/log/zookeeper/"
 SERVICE_LOG_PATH["hive"]="/var/log/hive/"
+SERVICE_LOG_PATH["hbase"]="/var/log/hbase/"
+
+CLEANER_LOG="/var/log/hk-script.log"
 
 ## Pattern filename
 PATTERN=( "*.log.*" "*.log-*" "*.out.*" "*.err.*" "*.audit.*" )
@@ -19,8 +23,8 @@ PATTERN=( "*.log.*" "*.log-*" "*.out.*" "*.err.*" "*.audit.*" )
 clean_log() {
     shopt -s nullglob
     for pattern in "${PATTERN[@]}"; do
-      for file in $LOG_PATH/$pattern; do
-        echo "Removing file $file" >> $CLEANER_LOG
+      for file in ${LOG_PATH}/${pattern}; do
+        echo "Removing file $file" >> ${CLEANER_LOG}
         rm -f "$file"
       done
     done
@@ -32,11 +36,11 @@ hk_log_path() {
         LOG_PATH=${folder}
         clean_log
       else
-        echo "Directory $LOG_PATH not exist, skip ..."
+        echo "Directory ${folder} not exist, skip ..." >> ${CLEANER_LOG}
     fi
 done
 }
 
 ## Main Program
-echo "====== Script Started ======= : $(date +%Y/%m/%d_%H:%M)" >> $CLEANER_LOG
+echo "====== Script Started ======= : $(date +%Y/%m/%d_%H:%M)" >> ${CLEANER_LOG}
 hk_log_path
