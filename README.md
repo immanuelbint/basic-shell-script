@@ -11,3 +11,4 @@ A collection of simple shell scripts I use for daily tasks like housekeeping, mo
 - [ ] Refactor scripts to follow shell scripting best practices
 - [ ] Package scripts into RPM for easier distribution
 - [ ] Add parameter support and improve documentation
+- [ ] Add support for multiple linux distro
